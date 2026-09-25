@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Research Studio</title>
+  <meta name="description" content="Professional multi-agent AI research workspace — search, read, synthesize, and critique." />
+  <meta name="theme-color" content="#0d0d10" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <!-- All JS deps bundled locally — no CDN dependency -->
+  <script src="./lucide.min.js"></script>
+  <script src="./purify.min.js"></script>
+  <script src="./marked.min.js"></script>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body class="dark">
+  <div class="app-shell">
+
+    <!-- ── SIDEBAR ──────────────────────────────────────────────────────── -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark"><i data-lucide="sparkles"></i></div>
+        <div>
+          <strong>Research Studio</strong>
+          <span>Multi-agent AI</span>
+        </div>
+      </div>
+
+      <button class="new-research" id="newResearch">
+        <i data-lucide="plus"></i>
+        New research
+        <kbd>⌘ K</kbd>
+      </button>
+
+      <nav class="nav" aria-label="Primary navigation">
+        <button class="nav-item active" id="navResearch"><i data-lucide="search"></i><span>Research</span></button>
+        <button class="nav-item" id="navHistory"><i data-lucide="history"></i><span>History</span></button>
+      </nav>
+
+      <div class="sidebar-section">
+        <div class="section-label">Recent</div>
+        <div id="recentList" class="recent-list" role="list"></div>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="profile">
+          <div class="avatar" aria-hidden="true">A</div>
+          <div><strong>Researcher</strong><span>AI Workspace</span></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ── MAIN ─────────────────────────────────────────────────────────── -->
+    <main class="main" id="main">
+
+      <!-- Top bar -->
+      <header class="topbar">
+        <button class="icon-button mobile-only" id="menuBtn" aria-label="Open menu"><i data-lucide="menu"></i></button>
+        <div class="breadcrumbs">
+          <span>Research</span>
+          <i data-lucide="chevron-right"></i>
+          <strong id="breadcrumbTitle">New session</strong>
+        </div>
+        <div class="top-actions">
+          <button class="icon-button" id="shareTopBtn" title="Share report" style="display:none" aria-label="Share report"><i data-lucide="share-2"></i></button>
+          <button class="icon-button" id="themeBtn" title="Toggle theme" aria-label="Toggle theme"><i data-lucide="sun-moon"></i></button>
+        </div>
+      </header>
+
+      <!-- ── HERO / INPUT ────────────────────────────────────────────────── -->
+      <section class="workspace" id="workspace">
+        <div class="hero" id="hero">
+          <div class="hero-badge"><i data-lucide="orbit"></i> Multi-agent deep research</div>
+          <h1>What do you want to <span>research?</span></h1>
+          <p>Search the web · inspect primary sources · synthesize evidence · critique the result — in one seamless workflow.</p>
+
+          <div class="search-card" role="search">
+            <textarea id="topicInput" rows="3"
+              placeholder="Ask a research question…&#10;e.g. Latest developments in AI reasoning models?"
+              aria-label="Research topic"></textarea>
+            <div class="composer-bottom">
+              <div class="composer-tools">
+                <span class="tool-badge"><i data-lucide="globe-2"></i> Web search</span>
+                <span class="tool-badge"><i data-lucide="file-search-2"></i> Source reader</span>
+                <span class="tool-badge"><i data-lucide="pen-line"></i> AI writer</span>
+              </div>
+              <button class="run-button" id="runBtn" aria-label="Start research">
+                <i data-lucide="arrow-up"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="suggestions" role="list" aria-label="Suggested topics">
+            <button data-topic="Latest developments in large language model evaluation" role="listitem">
+              <i data-lucide="bar-chart-3"></i><span>LLM evaluation trends</span>
+            </button>
+            <button data-topic="How AI agents are changing software engineering" role="listitem">
+              <i data-lucide="bot"></i><span>AI agents in software</span>
+            </button>
+            <button data-topic="Latest trends in retrieval augmented generation RAG" role="listitem">
+              <i data-lucide="database"></i><span>RAG developments</span>
+            </button>
+            <button data-topic="State of the AI job market in 2025" role="listitem">
+              <i data-lucide="briefcase-business"></i><span>AI job market</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ── RESEARCH VIEW ─────────────────────────────────────────────── -->
+        <div class="research-view hidden" id="researchView">
+
+          <!-- Query header -->
+          <div class="query-header">
+            <div>
+              <div class="eyebrow">Research session</div>
+              <h2 id="queryTitle"></h2>
+            </div>
+            <button class="secondary-button" id="newResearch2"><i data-lucide="plus"></i> New</button>
+          </div>
+
+          <!-- Pipeline stages -->
+          <div class="pipeline" id="pipeline" role="list" aria-label="Pipeline stages">
+            <div class="stage" data-stage="search" role="listitem">
+              <div class="stage-icon"><i data-lucide="globe-2"></i></div>
+              <div class="stage-info">
+                <strong>Search</strong>
+                <span>Finding reliable sources</span>
+              </div>
+              <div class="stage-status">
+                <span class="dot" aria-hidden="true"></span>
+                <span class="status-text">Waiting</span>
+              </div>
+            </div>
+            <div class="stage" data-stage="reader" role="listitem">
+              <div class="stage-icon"><i data-lucide="file-search-2"></i></div>
+              <div class="stage-info">
+                <strong>Reader</strong>
+                <span>Inspecting top sources</span>
+              </div>
+              <div class="stage-status">
+                <span class="dot" aria-hidden="true"></span>
+                <span class="status-text">Waiting</span>
+              </div>
+            </div>
+            <div class="stage" data-stage="writer" role="listitem">
+              <div class="stage-icon"><i data-lucide="pen-line"></i></div>
+              <div class="stage-info">
+                <strong>Writer</strong>
+                <span>Synthesizing the report</span>
+              </div>
+              <div class="stage-status">
+                <span class="dot" aria-hidden="true"></span>
+                <span class="status-text">Waiting</span>
+              </div>
+            </div>
+            <div class="stage" data-stage="critic" role="listitem">
+              <div class="stage-icon"><i data-lucide="shield-check"></i></div>
+              <div class="stage-info">
+                <strong>Critic</strong>
+                <span>Checking quality &amp; gaps</span>
+              </div>
+              <div class="stage-status">
+                <span class="dot" aria-hidden="true"></span>
+                <span class="status-text">Waiting</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="progress-line" role="progressbar" aria-label="Research progress" aria-valuemin="0" aria-valuemax="100">
+            <div id="progressBar"></div>
+          </div>
+
+          <!-- ── RESULT LAYOUT ──────────────────────────────────────────── -->
+          <div class="result-layout hidden" id="resultLayout">
+
+            <!-- Report panel -->
+            <article class="report-panel">
+
+              <!-- Toolbar -->
+              <div class="report-toolbar">
+                <div class="report-toolbar-title">
+                  <i data-lucide="scroll-text"></i>
+                  <span>Research Report</span>
+                </div>
+                <div class="toolbar-actions">
+                  <button class="toolbar-btn" id="copyBtn" title="Copy report as Markdown" aria-label="Copy report">
+                    <i data-lucide="copy"></i> Copy
+                  </button>
+                  <button class="toolbar-btn" id="downloadMdBtn" title="Download Markdown" aria-label="Download Markdown">
+                    <i data-lucide="file-text"></i> MD
+                  </button>
+                  <button class="toolbar-btn" id="downloadPdfBtn" title="Download PDF" aria-label="Download PDF">
+                    <i data-lucide="file-down"></i> PDF
+                  </button>
+                  <button class="toolbar-btn accent" id="shareBtn" title="Share report" aria-label="Share report">
+                    <i data-lucide="share-2"></i> Share
+                  </button>
+                </div>
+              </div>
+
+              <!-- Report body (Markdown rendered) -->
+              <div class="markdown" id="report" aria-live="polite"></div>
+
+              <!-- Sources section -->
+              <div class="sources-section hidden" id="sourcesSection">
+                <div class="sources-header">
+                  <i data-lucide="link-2"></i>
+                  <h4>Sources</h4>
+                </div>
+                <div class="sources-grid" id="sourcesGrid"></div>
+              </div>
+            </article>
+
+            <!-- Trace / evidence panel -->
+            <aside class="evidence-panel" aria-label="Research trace">
+              <div class="panel-header">
+                <div class="eyebrow">Evidence</div>
+                <h3>Research Trace</h3>
+              </div>
+
+              <details class="trace-section" open>
+                <summary>
+                  <span class="trace-badge search">Search</span>
+                  <i data-lucide="chevron-down" class="chevron"></i>
+                </summary>
+                <div class="trace-body">
+                  <pre id="searchResults" class="trace-pre"></pre>
+                </div>
+              </details>
+
+              <details class="trace-section">
+                <summary>
+                  <span class="trace-badge reader">Reader</span>
+                  <i data-lucide="chevron-down" class="chevron"></i>
+                </summary>
+                <div class="trace-body">
+                  <pre id="scrapedContent" class="trace-pre"></pre>
+                </div>
+              </details>
+
+              <details class="trace-section" open>
+                <summary>
+                  <span class="trace-badge critic">Critic</span>
+                  <i data-lucide="chevron-down" class="chevron"></i>
+                </summary>
+                <div class="trace-body critic-body">
+                  <div id="feedbackMd" class="markdown-sm"></div>
+                </div>
+              </details>
+            </aside>
+
+          </div><!-- /result-layout -->
+
+        </div><!-- /research-view -->
+      </section><!-- /workspace -->
+
+    </main>
+  </div><!-- /app-shell -->
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- History panel (off-canvas) -->
+  <div class="history-overlay hidden" id="historyOverlay">
+    <div class="history-panel">
+      <div class="history-header">
+        <h3>Research History</h3>
+        <button class="icon-button" id="closeHistory" aria-label="Close history"><i data-lucide="x"></i></button>
+      </div>
+      <div id="historyList" class="history-list"></div>
+    </div>
+  </div>
+
+  <script src="./app.js"></script>
+</body>
+</html>
