@@ -1,12 +1,31 @@
 # AI Research Studio
 
-A premium, local AI research workspace powered by a multi-agent pipeline.
+A premium AI research workspace powered by an autonomous multi-agent pipeline.
 Search the web → inspect primary sources → synthesize a structured report → critique the result — in one seamless workflow.
+
+[![Live Demo](https://img.shields.io/badge/Render-Live%20Demo-46E3B7?logo=render&logoColor=white&style=for-the-badge)](https://ai-research-agent-2eua.onrender.com/)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-AI--research--agent-181717?logo=github&logoColor=white&style=for-the-badge)](https://github.com/yoloaryan/AI-research-agent)
+
+🔗 **Live Deployment:** [https://ai-research-agent-2eua.onrender.com/](https://ai-research-agent-2eua.onrender.com/)
 
 ![Pipeline](https://img.shields.io/badge/pipeline-Search%20%E2%86%92%20Reader%20%E2%86%92%20Writer%20%E2%86%92%20Critic-6767d9)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-2.0-green)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
+
+---
+
+## 📖 About The Project
+
+**AI Research Studio** is an automated deep research assistant inspired by state-of-the-art systems like OpenAI Deep Research and Google Gemini Deep Research. 
+
+Standard LLM queries often suffer from hallucinated facts or lack of current context. AI Research Studio addresses this by orchestrating a **specialized 4-agent LangChain & LangGraph pipeline**:
+1. 🔍 **Search Agent**: Generates targeted queries and fetches real-time web intelligence using Tavily Search.
+2. 📖 **Reader Agent**: Scrapes and inspects primary sources directly to extract verified facts while stripping boilerplate.
+3. ✍️ **Writer Agent**: Synthesizes findings into an 8-section, citation-backed Markdown report with executive summaries and market analysis.
+4. 🧐 **Critic Agent**: Conducts an adversarial peer review, auditing factual depth, source quality, and bias.
+
+All reports are persisted in JSON, Markdown, and downloadable ReportLab PDFs, with shareable URLs and zero external JavaScript CDN dependencies.
 
 ---
 
@@ -55,8 +74,8 @@ AI-research/
 ### 1. Clone & create virtual environment
 
 ```bash
-git clone https://github.com/your-username/AI-research.git
-cd AI-research
+git clone https://github.com/yoloaryan/AI-research-agent.git
+cd AI-research-agent
 python3 -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\activate
 ```
