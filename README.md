@@ -152,6 +152,33 @@ After research completes:
 
 ---
 
+## Deploy to Render
+
+You can deploy this application directly to [Render](https://render.com) as a Web Service.
+
+### Option 1: Automatic Blueprint (Recommended)
+1. Go to [Render Dashboard](https://dashboard.render.com/) -> **New** -> **Blueprint**.
+2. Select your repository `AI-research-agent`.
+3. Render will auto-detect [`render.yaml`](file:///Users/aryangupta/Desktop/AI-research/render.yaml).
+4. Enter your environment variables (`GROQ_API_KEY`, `TAVILY_API_KEY`).
+5. Click **Apply**.
+
+### Option 2: Manual Web Service
+1. In Render, click **New +** -> **Web Service**.
+2. Connect your repository.
+3. Configure the settings:
+   - **Runtime**: `Python 3`
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `uvicorn api:app --host 0.0.0.0 --port $PORT`
+4. Under **Environment Variables**, add:
+   - `GROQ_API_KEY`: Your Groq API key
+   - `TAVILY_API_KEY`: Your Tavily API key
+   - `GROQ_MODEL`: `qwen/qwen3.8-27b`
+5. Click **Deploy Web Service**.
+
+---
+
 ## License
 
 MIT
+

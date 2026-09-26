@@ -1,0 +1,42 @@
+# Core LLM + LangChain ecosystem
+langchain>=0.2.0
+langchain-core>=0.2.0
+langchain-community>=0.2.0
+langchain-openai>=0.1.0
+langchain-groq>=0.1.0
+
+# OpenAI
+openai>=1.30.0
+
+# Tavily Search Tool
+tavily-python>=0.3.0
+
+# Web scraping
+beautifulsoup4>=4.12.0
+requests>=2.31.0
+lxml>=5.0.0
+
+# Environment variables
+python-dotenv>=1.0.0
+
+# Async support
+aiohttp>=3.9.0
+aiofiles>=23.2.1
+
+# Data handling & token utilities
+pandas>=2.0.0
+tiktoken>=0.6.0
+rich>=13.7.0
+tenacity>=8.2.0
+orjson>=3.9.0
+
+# Data validation & FastAPI backend
+pydantic>=2.5.0
+fastapi>=0.110.0
+uvicorn[standard]>=0.28.0
+
+# HTML parsing
+html5lib>=1.1
+
+# PDF generation
+reportlab>=4.1.0

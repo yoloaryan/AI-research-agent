@@ -8,7 +8,11 @@
  * so they are guaranteed available when this script runs.
  */
 
-const API = "http://localhost:8000";
+// Base API endpoint: dynamic relative URL for production/Render and port 8000,
+// with localhost:8000 fallback for local python3 -m http.server 5500
+const API = (window.location.port === "5500" || window.location.port === "3000")
+  ? "http://localhost:8000"
+  : "";
 
 // Init icons immediately — lucide.min.js is in <head> so it's ready
 if (typeof lucide !== "undefined") lucide.createIcons();

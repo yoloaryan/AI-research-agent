@@ -21,6 +21,7 @@ from pathlib import Path
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, PlainTextResponse, Response
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from pipeline import run_research_pipeline
@@ -376,12 +377,20 @@ async def research_legacy(request: ResearchRequest):
     return await research(request)
 
 
+# ── Serve static frontend ─────────────────────────────────────────────────────
+FRONTEND_DIR = Path(__file__).parent / "frontend"
+if FRONTEND_DIR.exists():
+    app.mount("/", StaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")
+
+
 if __name__ == "__main__":
     import uvicorn
+    port = int(os.getenv("PORT", 8000))
     uvicorn.run(
         "api:app",
         host="0.0.0.0",
-        port=8000,
+        port=port,
         reload=True,
         timeout_keep_alive=300,
     )
+
